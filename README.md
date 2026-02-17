@@ -2,7 +2,7 @@
 
 Convierte tu gimnasio en un negocio moderno, automatizado y escalable.
 
-GYM SaaS es una plataforma profesional diseñada para **digitalizar y optimizar la gestión completa de gimnasios**, reduciendo trabajo manual, mejorando la organización y permitiendo un control total del negocio desde un solo lugar.
+GYM APP es una plataforma profesional diseñada para **digitalizar y optimizar la gestión completa de gimnasios**, reduciendo trabajo manual, mejorando la organización y permitiendo un control total del negocio desde un solo lugar.
 
 ---
 
