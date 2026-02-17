@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String   @unique
+  phone       String?
+  plan        Plan     @default(BASIC)
+  status      MemberStatus @default(ACTIVE)
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reservations Reservation[]
+  payments     Payment[]
+}
+
+enum Plan {
+  BASIC
+  PREMIUM
+}
+
+enum MemberStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+model Class {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  instructor  String
+  day         String
+  time        String
+  duration    Int
+  capacity    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reservations Reservation[]
+}
+
+model Reservation {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  date      DateTime
+  status    ReservationStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberId  String   @db.ObjectId
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  
+  classId   String   @db.ObjectId
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model Payment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  concept   String
+  amount    Float
+  date      DateTime @default(now())
+  method    PaymentMethod @default(CASH)
+  status    PaymentStatus @default(COMPLETED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberId  String   @db.ObjectId
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+}
+
+model Membership {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  price       Float
+  duration    Int      // duración en meses
+  benefits    String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
